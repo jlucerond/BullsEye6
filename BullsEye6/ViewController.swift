@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import QuartzCore
 
 class ViewController: UIViewController {
     // MARK: - Variables
@@ -26,8 +27,11 @@ class ViewController: UIViewController {
     // MARK: - View Controller Methods
     override func viewDidLoad() {
         super.viewDidLoad()
+        setUpSlider()
         startNewGame()
     }
+    
+
     
     // MARK: - IBActions
     @IBAction func showAlert() {
@@ -42,16 +46,36 @@ class ViewController: UIViewController {
     
     @IBAction func restartGame() {
         startNewGame()
+        
+        let transition = CATransition()
+        transition.type = kCATransitionFade
+        transition.duration = 0.5
+        transition.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseOut)
+        view.layer.add(transition, forKey: nil)
     }
     
 }
 
 
-// - MARK: Slider Functionality
+// - MARK: Slider Properties &  Functionality
 extension ViewController {
     @IBAction func sliderMoved(_ slider: UISlider) {
         print("Slider value: \(slider.value)")
     }
+    
+    func setUpSlider() {
+        slider.setThumbImage(#imageLiteral(resourceName: "SliderThumb-Normal"), for: .normal)
+        slider.setThumbImage(#imageLiteral(resourceName: "SliderThumb-Highlighted"), for: .highlighted)
+        
+        let insets = UIEdgeInsets(top: 0, left: 14, bottom: 0, right: 14)
+        let trackLeftImage = #imageLiteral(resourceName: "SliderTrackLeft")
+        let trackRightImage = #imageLiteral(resourceName: "SliderTrackRight")
+        let trackLeftResizable = trackLeftImage.resizableImage(withCapInsets: insets)
+        let trackRightResizable = trackRightImage.resizableImage(withCapInsets: insets)
+        slider.setMinimumTrackImage(trackLeftResizable, for: .normal)
+        slider.setMaximumTrackImage(trackRightResizable, for: .normal)
+    }
+
 }
 
 // - MARK: Game Functionality
